@@ -133,15 +133,20 @@ function importer(){
          //   __logger.debug("[SMS Import] Options Length"+options.length);
             
             optionCodeMap = options.reduce(function(map,obj){
-                var key = obj.code;
-		key = config.sms.shared_shortcode_prefix?config.sms.shared_shortcode_prefix+" ":"" + key;
-		key = key.toLowerCase().replace(/\s\s+/g, ' ');
+                var key = obj.code.toLowerCase().replace(/\s\s+/g, ' ');
 		map[key] = obj;
                 return map;
             },[]);
 
             var smsKey = SMS.message.toLowerCase().replace(/\s\s+/g, ' ');
+	    if (config.sms.shared_shortcode_prefix){
+		if (smsKey.startsWith(config.sms.shared_shortcode_prefix)){
+		    smsKey = smsKey.slice(config.sms.shared_shortcode_prefix.length,smsKey.length)
+		}
+	    }
 
+	    smsKey = smsKey.trim();
+	    
             var match = "";
             for (var key in optionCodeMap){
                 if (smsKey.startsWith(key)){
@@ -151,6 +156,8 @@ function importer(){
                 }
             }
 
+	    __logger.info("smsKey="+smsKey.substr(0,10)+"... , match="+match+" , optionCodeMap[match]="+optionCodeMap[match])
+	    
             converter.getEventFromMessage(SMS,optionCodeMap[match],postEventCreation);
             
         });
