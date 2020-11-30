@@ -3,7 +3,8 @@
         "apikey" : "",
         "username" : "",
         "shortcode" : "",
-        "base_url" : "https://api.africastalking.com/version1/messaging"
+        "base_url" : "https://api.africastalking.com/version1/messaging",
+	"shared_shortcode_prefix" : ""
     },
 
     "dhis2" : {

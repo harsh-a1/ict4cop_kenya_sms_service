@@ -32,7 +32,7 @@ function importer(){
 
             var flag = controlRoomUserG.users.reduce(function(flag,obj){
                 
-                if (obj.phoneNumber.includes(SMS.from)){
+                if (obj.phoneNumber && obj.phoneNumber.includes(SMS.from)){
                     flag=true;
                 }
                 
@@ -133,8 +133,10 @@ function importer(){
          //   __logger.debug("[SMS Import] Options Length"+options.length);
             
             optionCodeMap = options.reduce(function(map,obj){
-                var key = obj.code.toLowerCase().replace(/\s\s+/g, ' ');
-                map[key] = obj;
+                var key = obj.code;
+		key = config.sms.shared_shortcode_prefix?config.sms.shared_shortcode_prefix+" ":"" + key;
+		key = key.toLowerCase().replace(/\s\s+/g, ' ');
+		map[key] = obj;
                 return map;
             },[]);
 
